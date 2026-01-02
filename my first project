@@ -1,0 +1,62 @@
+import random
+player_hp = 10
+
+# I have no idea if this is supposed to be in he while loop but let's just keep it pushing
+# Never mind. It works just as it needs to
+# Also, I'm giving the normal guy a damage buff. He kinda sucks. Now he should be just as much of a threat as tank and glass canon
+enemies = {
+    'tank': {
+        'health': 15,
+        'damage': 2
+    },
+    'normal': {
+        'health': 8,
+        'damage': 3
+    },
+    'glass_canon': {
+        'health': 6,
+        'damage': 2
+    }
+}
+current_enemy = random.choice(list(enemies))
+
+print(f"You are currently facing {current_enemy}!")
+
+current_enemy_stats = enemies[current_enemy]
+
+while player_hp > 0 and current_enemy_stats['health'] > 0:
+    decide = input("Would you like to attack? (Y/N): ").lower()
+    attacks = ['punch', 'heavy kick', 'heal']
+
+# Implementing the new dictionary was easy,
+# All I had to do was copy and paste "current_enemy_stats['health']" where all the "enemy_health" was
+# Also, I'm nerfing heavy kick to do 4 damage. Hopefully this makes heal relevant
+    if decide in ["y", "yes"]:
+        used_move = input(f"Which move would you like to use? {attacks}: ")
+        if used_move.lower() == 'punch':
+            current_enemy_stats['health'] -= 2
+            current_enemy_stats['health'] = max(current_enemy_stats['health'], 0)
+            print(f"Enemy has {current_enemy_stats['health']} health left!")
+        elif used_move.lower() == 'heavy kick':
+            current_enemy_stats['health'] -= 4
+            current_enemy_stats['health'] = max(current_enemy_stats['health'], 0)
+            print(f"Enemy has {current_enemy_stats['health']} health left!")
+        elif used_move.lower() == 'heal':
+            player_hp += 2
+            if player_hp > 10:
+                player_hp = 10
+                print(f"You healed yourself. You now have {player_hp} health!")
+
+        if current_enemy_stats['health'] == 0:
+            print("You defeated the enemy. Congrats!")
+            break
+    else:
+        print("You skipped your turn!")
+
+# "This just giant if/elif block must die" as chatgpt funnily remarked.
+# Having a bit of trouble figuring out how the logic will work though
+# I figured it out and I'm honestly happy with how this project turned out
+    if current_enemy_stats['health'] > 0:
+        player_hp -= current_enemy_stats['damage']
+        print(f"The enemy attacked you and dealt {current_enemy_stats['damage']} damage!")
+        print(f'You now have {player_hp} hp.')
